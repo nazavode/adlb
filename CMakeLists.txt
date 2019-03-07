@@ -8,8 +8,6 @@ if(ADLB_ENABLE_FORTRAN)
     check_language(Fortran)
     if(CMAKE_Fortran_COMPILER)
         enable_language(Fortran)
-        include(FortranCInterface)
-        FortranCInterface_VERIFY()
     else()
         message(FATAL_ERROR "Fortran support can't be enabled, \ 
 please set ADLB_ENABLE_FORTRAN=OFF or provide a valid Fortran toolchain.")
@@ -37,6 +35,10 @@ target_include_directories(adlb PUBLIC ${ADLB_INCLUDE_PATH})
 target_link_libraries(adlb PUBLIC MPI::MPI_C)
 
 if(ADLB_ENABLE_FORTRAN)
+    # Ensure C/Fortran interoperability and
+    # generate mangling header:
+    include(FortranCInterface)
+    FortranCInterface_VERIFY()
     FortranCInterface_HEADER(
         ${CMAKE_CURRENT_BINARY_DIR}/fortran_c_mangling.h
         MACRO_NAMESPACE "ADLB_FC_")
