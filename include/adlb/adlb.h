@@ -7,8 +7,6 @@
 
 #include <mpi.h>
 
-#include <adlb/xq.h>
-
 #define  ADLB_VERSION             ADLBM
 #define  ADLB_VERSION_NUMBER      463
 #define  ADLB_VERSION_DATE        27-Apr-2017

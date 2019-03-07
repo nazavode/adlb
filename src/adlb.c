@@ -6,6 +6,8 @@
 
 #include <adlb/adlb.h>
 
+#include "xq.h"
+
 #define DBG_CHECK_TIME  30
 
 #if defined(__bgp__) || defined(__bgq__)  ||  defined(__bg__)

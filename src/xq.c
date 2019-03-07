@@ -1,6 +1,6 @@
 #include <limits.h>  /* for INT_MIN */
 
-#include <adlb/xq.h>
+#include "xq.h"
 
 xq_t *xq_create()
 {
