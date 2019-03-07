@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 #define MAXLEN 1024
 #define TYPE_AB 1

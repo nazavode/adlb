@@ -9,7 +9,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 #define NUM_AS_TO_GEN_PER_BATCH   40  /* gfmc: 40 in walkers */
 #define NUM_BS_TO_GEN_PER_BATCH   40  /* gfmc: 40 in walkers */

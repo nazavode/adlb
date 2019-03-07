@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 #define NUMDISKS 4
 #define WORK 1

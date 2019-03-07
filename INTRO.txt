@@ -215,7 +215,7 @@ Example Fortran program:
       implicit real*8 ( a-z )
       
       include "mpif.h"
-      include "adlbf.h"
+      include "adlb/adlb.h"
 
       integer, parameter ::  A_EPOCH     = 2,
      &                       CS_PER_B    = 8,
@@ -551,7 +551,7 @@ Example C program:
 #include <string.h>
 #include <math.h>
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 #define A_EPOCH   2
 #define CS_PER_B  8

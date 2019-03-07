@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 #define CMDLINE 1
 

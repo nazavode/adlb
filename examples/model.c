@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 
 #define MASTER_RANK 0

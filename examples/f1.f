@@ -1,7 +1,7 @@
       implicit real*8 ( a-z )
       
       include "mpif.h"
-      include "adlbf.h"
+      include "adlb/adlb.h"
 
       integer, parameter ::  A_EPOCH     = 2,
      &                       CS_PER_B    = 8,

@@ -5,7 +5,7 @@
  * There is not a good method for telling when to stop.
  */
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 #define WORK_TYPE        1
 #define WORK_PRIO        1

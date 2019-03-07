@@ -7,7 +7,7 @@
  * program does that.
  */
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 void printgrid(double **,int,int);
 double avggrid(double **,int,int);

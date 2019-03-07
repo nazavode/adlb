@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 #define WORK                  1000
 #define SOLUTION              2000

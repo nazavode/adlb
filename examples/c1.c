@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "adlb.h"
+#include <adlb/adlb.h>
 
 #define A_EPOCH   2
 #define CS_PER_B  4
