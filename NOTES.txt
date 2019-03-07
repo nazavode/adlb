@@ -1,0 +1,459 @@
+27 Apr 2017:
+    463: add Makefile-crayos_intel for use on Theta and new ANL machine
+
+31 Oct 2015:
+    462: rename grid* files and fix grid_uni and grid_daf to work correctly
+         correct README.txt about how target/reserve_rank is used for Put
+
+22 Nov 2014:
+    461: avoid copy of packet when pushing to new server; better messages about rejected puts
+
+05 Nov 2014:
+    460:  more work on PUT_REJECTED including adding pmalloc which is basically a dmalloc just
+          for puts on server side; also added c4 to Makefile.in
+
+14 Nov 2014:
+    459:  changed adlb.c to deliver more PUT_REJECTED messages to client rather than failing in dmalloc
+
+27 Dec 2013:
+    451:  add adlb_with_iallgather.c
+
+15 Dec 2013:
+    447:  fix version numbers
+    445:  c4 is looking much better, so we are making a pretty significant
+          change to adlb.c in which we send status vector messages via a 
+          different communicator (adlb_server_comm); also, xq.c is now
+          changed to print wq_entry msgs regarding work left in the wq
+
+21 Nov 2013:
+    432:  Better version of c4.c after chatting with Steve.  More to come shortly.
+
+20 Nov 2013:
+    431:  Initial commit of gfmcAlgorithm.txt (Steve's gfmc pseudocode), and c4.c
+          c4.c is intended to be an implementation of of the gfmc pseudocode, but
+          it does not yet compile clean.
+
+07 Sept 2013:
+    430:  Added some comments at the top of adlb_with_irecvs.c
+
+07 Sept 2013:
+    429:  Adding adlb_with_irecvs.c in case I ever want to explore it further.
+          It replaces much of the handling of msgs done via Iprobe with a set
+          of Irecvs that are left outstanding.  It is a copy of version 428 with
+          those changes applied.  Note that there is a large comment at the top
+          explaining that it contains bugs until the work is completed.
+
+02 Sept 2013:
+    428:  I accidentally left in a re-numbering of message tags when I did version 427,
+          so am fixing that here in 428, leaving in the new iq_appends.
+
+02 Sept 2013:
+    427:  added five calls to iq_append which were not being called for some iq_create_node's
+
+21 May 2013:
+    426:  added jeffhack_21may2013_adlb.c -- comments about it are at the top of the file
+
+14 Feb 2013:
+    425:  fix README comments about batch operations
+
+28 Jan 2013:
+    424:  add c3
+
+28 Jan 2013:
+    423:  have nqueens make sure it receives enough ranks to run
+
+14 Mar 2012:
+    421:  fix genfh.py for len of a char string, and to handle continuations correctly
+
+05 Jan 2012:
+    420:  add prep_for_commit  to Makefile.in, and supporting python programs
+
+09 May 2011:
+    418:  a few prototypes added a suggested by Bob Walkup
+
+07 Feb 2011:
+    417:  LDFLAGS in Makefile.in and chgd dprintf to adlbp_dbgprintf to avoid 
+          conflict with dprintf in stdio
+
+31 Jan 2011:
+    416:  added output to sudoku (by Rusty)
+
+18 Nov 2010:
+    415:  added *fake* batch2 stuff to adlbm so Steve's pgms will also compile with adlbr
+
+12 Dec 2009:
+    414:  by anthony: updated GetUnexpectedQueue() and friends for V1R4M0 and added
+          MPICH2_NUMVERSION so the code works with V1R2, V1R3 and V1R4.
+
+02 Dec 2009:
+    413:  eliminate compile warnings when using -Wall
+
+27 Sep 2009:
+    412:  change so that there is no more than 1 RFR from one server to another
+          at any given time; was filling up unexpected queues otherwise
+
+19 Sep 2009:
+    411:  fix bug in mis-spelling of DEBUGGING_SICORTEX in one place
+
+18 Sep 2009:
+    410:  remove debug print stmt
+    409:  changed Iprobe of QMSTAT msgs to Irecv/Test
+
+08 Sep 2009:
+    408:  move setting dprintf_flag from aprintf_flag
+
+04 Sep 2009:
+    407:  have DBG7 print unexpected queue vals all the time
+    406:  combine DBG7 and DBG7u fixing DBG7u
+
+03 Sep 2009:
+    405:  added some new stats that Steve wants to collect
+
+31 Aug 2009:
+    404:  cleaned up some prints, etc. in: batcher.c, cmds2, model.c, sudoku.c
+
+17 Aug 2009:
+    403:  1.  use 0 for count of unexpected msgs when not on bgp 
+          2.  turn on DEBUGGING_BGP flag via ifdef for __bg__ || __bgp__
+
+13 Aug 2009:
+    **** Steve is getting successful runs using 401 corrected with the 402 fix.
+    **** He gets good efficiency (89%) up thru 8 racks (32,000 procs),
+    **** but only about 67% with 16 racks (64,000).
+    402:  put the 'M' back on the version number in adlbf.h
+    401:  correct version number
+    400:  change Put to return reject after 1000 failed sets of attempts
+
+12 Aug 2009:
+    398:  correct minor bug in Rusty's batcher.c pgm
+    394:  in End_batch_put, do not send FA_PUT_BATCH_DONE unless we actually
+          have a common_server_rank >= 0
+    393:  fixed bug in handling common_refcnt for batch puts (reset to 0)
+          also added a cq_print routine which gets called with other q prints
+
+07 Aug 2009:
+    392:  changed Put to never give up trying; print instead of return REJECTED
+
+04 Aug 2009:
+    391:  added and committing batcher.c
+
+04 Aug 2009:
+    390:  add aprintf_flag to ADLB_Init in the interface
+
+06 Jul 2009:
+    389:  turn on use_dbg_prints and DBG4 and DBG7
+
+05 Jul 2009:
+    388:  Fix bugs in allocating dbg arrays and using unexpected cnt on non-bgp
+    387:  Lots of updates to put DBG prints inside if's etc.
+          Better handling of update tq and statvec in bad rc RFR_RESP.
+          Comment out debug print in nq.
+
+29 Jun 2009:
+    386:  Turn off out-of-order handling msgs via Iprobe
+
+29 Jun 2009:
+    385:  This is a HEAVILY debug version of adlb.c;
+          it has lots of DBG prints in it and even special code for 
+          looking at the MPI unexpected message queue on the IBM/BGP;
+          when we get to a stable point with Steve's code, I will 
+          delete and clean up a lot of the stuff
+
+04 Jun 2009:
+    384:  Switch to a mode for Put where we try a Put to all
+          servers until one will take it, or we reach a point
+          where all servers can not take it and believe all 
+          other servers to be out of space
+
+01 Jun 2009:
+    383:  Fixed bug causing empty Common (zero len) for batches with no common
+
+27 May 2009:
+    382:  Fixed bug in TA_RESERVE_RESP inside handling PUT_HDR
+
+24 May 2009:
+    381:  Fixed bug created in fix for version 380
+
+24 May 2009:
+    380:  Fixed bug in ss_push_query_resp; can not push an item that has
+          been Reserved since I requested the Push
+
+23 May 2009:
+    379:  Fixed bug in handling ss_push_hdr;
+          could possibly hand the new, pushed data to wrong rank on rq
+
+23 May 2009:
+    378:  Fixed bug in handling ss_push_query_resp (was not setting ws before usage)
+
+21 May 2009:
+    377:  Lots of code chgs; switching to a model in which only one
+          copy of common pieces are kept; commons are not pushed but
+          those unique pieces with a common can be pushed;  increased
+          size of ADLB_HANDLE_SIZE to 5 for the other chgs.
+          Also, lots of new code for new version of push.  In particular,
+          now push allocates the space on the query and has it available
+          when the actual push occurs.  It reclaims the space if data 
+          has already disappeared from the pushing server due to a get.
+
+17 May 2009:
+    376:  refuse PUT_COMMON if not enough space
+
+08 May 2009:
+    375:  cause version updates to adlbf.h and adlb.c
+
+14 Apr 2009:
+    374:  added configargs/rmbmac.cfg
+
+30 Mar 2009:
+    373:  better comments at top of nq.c
+    372:  new, fancier nq
+    371:  alter adlb.c so that it does round-robin on Put to servers
+
+15 Mar 2009:
+    370:  Update version values in adlbf.h and adlb.c
+    369:  Fix some more minor errors in README.txt
+
+15 Mar 2009:
+    368:  Fix some minor errors in README.txt
+
+14 Mar 2009:
+    367:  Add pmcmc.c demo program (Markov Chain Monte Carlo)
+
+12 Mar 2009:
+    366:  Put a couple of stats gathering lines inside "if (using_debug_server)"
+
+09 Mar 2009:
+    365:  Fix meaning of one of the stats
+    364:  Fix bugs in collecting new stats
+    363:  New stats gathered by debug_server (several new counters)
+
+05 Mar 2009:
+    362:  New stats gathered by debug_server (wq_targeted and untargeted)
+
+04 Mar 2009:
+    361:  Remove a debug print stmt
+    360:  New stats gathered by debug_server via DB_PING msg
+
+28 Feb 2009:
+    359:  A little better support for nq program
+
+27 Feb 2009:
+    358:  Delete extra print of times in Debug_server
+          Comment out extra print of wq, etc. in print_final_stats
+
+25 Feb 2009:
+    357:  Anthony made -g default in config stuff
+    356:  re-code usage of Debug_server to be mostly a hang detector
+
+16 Feb 2009:
+    355:  fixed bug in xq.c (handle work_type -1 in tq_find_first_rt)
+          deleted some duplicate comments from README.txt
+
+04 Feb 2009:
+    354:  add entry for steve in Makefile.in
+
+08 Jan 2009:
+    353:  add stdio.h to xq.h
+
+04 Jan 2009:
+    352:  cause QMSTAT msgs to be favored by new mainloop Iprobe
+
+02 Jan 2009:
+    351:  turn off a debug print
+    350:  move malloc of bufidx inside if-stmt
+
+01 Jan 2009:
+    349:  Change PUSH_QUERY_RESP so that we no longer send MOVING msg to home_server;
+          instead, send MOVING from the server we push the data to (PUSH_HDR); note
+          that if the data gets pushed to the home_server, the home_server should
+          continue to NOT create a new tq element for it. 
+    348:  reverse TEMP chg in 347
+
+31 Dec 2008:
+    347:  two changes: 
+            1. don't create a tq entry pointing to myself
+            2. TEMP: chg PUSH_WORK to Ssend temporarily (fix later)
+
+30 Dec 2008:
+    346:  use subroutines to print queues
+    345:  print tq with other queues when aborting
+    344:  enhance debug server to print every minute if it does not recv a msg
+
+23 Dec 2008:
+    343:  add 2 check_remote_work_for_queued_apps on moving pushed-targeted work
+    342:  fix bug on how updating tq entries
+
+21 Dec 2008:
+    341:  produce extra debug output for steve
+    340:  update adlbf.h
+    339:  Print prev values in debug_server, even on abort by debug server itself
+
+19 Dec 2008:
+    338:  Update adlbf.h
+    337:  Fix bug in passing values to debug_server
+    336:  Fix bug in debug_server interface
+    335:  Fix bug in check for debug_server
+
+18 Dec 2008:
+    334:  enhance debug_server (keep msg type that caused DB_PING)
+    333:  add nq.c
+
+15 Dec 2008:
+    332:  Fix 2 bugs in handling of pushed-targeted work
+
+14 Dec 2008:
+    331:  Chg value in adlbf.h
+    330:  Fix bug in abort portion of Debug_server
+
+08 Dec 2008:
+    329:  Re-do abort stuff; invented adlb_server_abort to help.
+          Fix bug in which Put which fails over to anotehr server 
+          may have to push the common part first if it is part of
+          a batch put with common data.
+
+06 Dec 2008:
+    328:  Chg max_wq_count to be a value obtained via Info.
+          Fix bug with ifdef around Info inside adlb_prof.c
+
+04 Dec 2008:
+    327:  Print max size of wq in final stats.
+          Added max_count to xq structs and kept track of largest size
+          (in xq.h and xq.c).
+    326:  New comments in README.txt about Anthony's new configure setup.
+    325:  Replace adlb.c which Anthony had committed with CR/LF problems,
+          i.e. looked like a dos file.  Note that this version includes 
+          updates for the new code using Send (vs Ssend) and Rsends.
+
+01 Dec 2008:
+    321 etc:  Anthony updates for new config.
+
+15 Oct 2008:
+    320:  Fix issues in config.py in and adlb_conf.h handling fortran interface
+          Also new rev number in adlbf.h
+
+15 Oct 2008:
+    318-319:  Chgs by Anthony
+
+14 Oct 2008:
+    317:  Fix bug in adlbf.c: need to use MPI_Fint for MPI_Comm in Fortran
+
+10 Oct 2008:
+    316:  Fix bug in adlbf.c: need to use MPI_Comm_c2f
+
+01 Oct 2008:
+    315:  Fix bug in Makefile and Makefile.cluster for building c1mpilog
+
+23 Sep 2008:
+    314:  Fix bug in Makefile.sicortex for building c1mpilog
+
+23 Sep 2008:
+    313:  Remove adlb_log.c and put ifdef's for logging into adlb_prof.c
+          Update Makefile's accordingly
+
+11 Sep 2008:
+    312:  Add ADLB_Abort wrapper to adlb_log.c
+          Fix bug in building log pgms for sicortex.
+
+10 Sep 2008:
+    311:  Change adlb_log.c so that by default we log a guess as to when the 
+          user app is working and what type it is working on.  Guess by logging
+          the type user retrieves via Get_reserved.
+    310:  Alter adlb.c to only time waits on the rq which are not either first
+          or last.  The first may be long during init and the last may be long
+          during wait for wind-down.
+
+6 Sep 2008:
+    309:  Fix value of ADLB_NO_CURRENT_WORK in adlbf.h
+
+5 Sep 2008:
+    308:  Add support for some new stats-gathering code for Steve.
+
+2 Sep 2008:
+    307:  Make add2.c conform to new interface.
+
+29 Aug 2008:
+    306:  Fix bug in periodic logging specific to the new updates
+29 Aug 2008:
+    305:  Restore a debug print that Steve likes and update adlbf.h
+29 Aug 2008:
+    304:  New code to have an app rank try an alternative server if the default
+          one cannot accept a Put.  This requires the default server to create
+          a tq entry if the work has a target rank.
+
+26 Aug 2008:
+    303:  Remove extra setting of prev_qmstat_msg_time while handling Batch
+
+25 Aug 2008:
+    302:  Move some stuff around in Makefile.sicortex
+25 Aug 2008:
+    301:  Update adlbf.h to give a new release to Steve.
+25 Aug 2008:
+    298:  Add Makefile.debug_sicortex that shows how to build c1, etc.
+          using the tools to examine early queue, from Gingold.
+
+20 Aug 2008:
+    297:  Further separate pinned and targeted work.  In particular,
+          make sure the qlen in qmstat_tbl does not include either
+          pinned or targeted work.  Also make sure type_hi_prio counts
+          do not include them.
+
+19 Aug 2008:
+    296:  New versions of Makefile.sicortex and Makefile.bgp with
+          enhancements preferred by Steve.
+
+    295:  Changed adlb.c and xq.[hc] removing rfr_rank field from rq
+          entries.  Instead keep a vector rfr_to_rank for each rank in
+          the run which tells if it has an outstanding RFR.  Don't have
+          2 or more RFRs out at once for a single rank.  Also altered
+          occurrences of qm_stat to be qmstat.
+
+15 Aug 2008:
+    294:  This is a significant new version where we have switched to
+          a new model for the QMSTAT msgs, i.e. there is just one 
+          QMSTAT msg generated at regular intervals by the master
+          server.  I have removed an extra Iprobe that specifically
+          checks for this msg and may speed up the time around the
+          loop somewhat in some cases.  Also, I have commented out a
+          special call to MPI_Test just for that type which was also
+          intended to speed up the send of it a little bit.
+          If we want to restore from this version to the last good one
+          that used many small QMSTAT msgs, then I should restore to 
+          rev 293.
+
+08 Aug 2008:
+    285:  I am not giving this one to Steve.  But it is a change 
+          that affects a lot of files:
+                skel.c adlb.c c1.c tsp.c adlb.h adlbf.c adlbf.h
+                NOTES.txt adlb_prof.c adlb_log.c f1.f README.txt
+          I left Set_no_more_work there for the short term but
+          added Set_problem_done.
+          I added return code #define's to the .h files and used
+          them in the .c and .f files.  These are described in the
+          READMEt.txt.
+
+05 Aug 2008:
+    281:  altered adlb.c to send_qm_stat msgs only at particular
+          intervals (1 second right now), and at BATCH_DONE;
+          also altered its operation on RFR_RESP for the situation
+          in which there was no work to reserve; put the set of
+          types that could not be found in the message and use them
+          to alter the qmstat tbl; note we continue to alter the 
+          tbl based on the local rq entry if it is still there, but
+          sometimes that entry has been removed due to a Put
+
+
+01 Aug 2008:
+    I am going to start using this file to keep some notes about the
+    state of the adlbm project.  In particular, my present plans are
+    to keep additional notes about some of the bigger revisions beyond
+    what you might get out of 'svn log'.
+
+01 Aug 2008:
+    274:  we are currently at this revision, but I hope to shortly do
+          one or more commits that will be rather significant, esp some
+          changes to adlb.c that move us from Probe to Iprobe in the
+          main loop.
+    278:  I am now committing adlb.c, adlb.h, and tsp.c which implement
+          and use Iprobe, and support detection of exhaustion by looking
+          to see if all app ranks are on the rq.  This file will be part
+          of the commit.

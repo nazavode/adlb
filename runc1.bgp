@@ -1,0 +1,31 @@
+#!/bin/tcsh
+
+# You can request to get small corefiles from all processors when a
+# job is killed for its time limit by using:
+#     -e BG_COREDUMPONEXIT=1       on cqsub or
+#     --env BG_COREDUMPONEXIT=1    on qsub
+# To use the corefiles, you can use coreprocessor:
+#     http://www.redbooks.ibm.com/redpieces/abstracts/sg247287.html?Open
+#     /bgsys/drivers/ppcfloor/tools/coreprocessor/coreprocessor.pl
+# in a text mode like this:
+#     coreprocessor -nogui -mode=Detailed -b=/home/spieper/gfmc/mc/x.adlb.10b-m0 \
+#         -c=/home/spieper/gfmc/adlb-tests/corefiles > trace.out
+# 
+# To use it in a GUI mode:
+# You need to have an X server running and your DISPLAY set (i.e. x tunneling through ssh)
+# Run coreprocessor.
+#    Select File->Load Core
+#      Fill in for example
+#          path to cores:  /home/spieper/gfmc/adlb-tests/corefiles
+#          cnk binary:     /home/spieper/gfmc/mc/x.adlb.10b-m0
+# 
+# It churns for a minute or so
+#        Select Group Mode: Stack Traceback (detailed)
+# It will now show a stack listing with branches for each group of
+# procs, and the count at that spot.  If you click on any line, it
+# will show the source line number info and the list of core files
+# at that spot.
+
+# note that -q prod uses the production queue which requires at least 512 procs
+
+qsub -q prod-devel -t 5 -n 64 /gpfs/home/rbutler/tm2

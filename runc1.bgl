@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cqsub -q short -m vn -n 128 -c 256 -t 10 /home/rbutler/adlbm/c1
+
+# cqsub -q short -m vn -n 128 -c 256 -t 14 -O a64c64p256s253 /home/rbutler/adlbm/c1
+
+# cqsub -n 64 -t 30 /home/rbutler/adlbm/c1

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# squeue  # shows jobid
+# scancel jobid
+
+# srun -K -p scx-comp -n 1  -N 1  hw
+# srun -K -p scx-comp -n 16  -N 16  hw
+# srun -K -p scx-comp -n 16  -N 16 tcsh -c 'limit coredumpsize 5555 ; /tmp/frost_home/rbutler/temp'
+
+# -n nprocs  -N nnodes  (each node is 6 cores)
+# -v verbose (can have multiple -v)
+# -K kill on bad exit (if any rank ends with bad return code)
+# -t timelimit in minutes
+# -l label lines (can NOT be used with -u)
+# -u unbuffered  (can NOT be used with -l)
+# -o output file (stderr also goes here unless you use --error filename)
+
+# srun -v -u -K -p scx-comp -n 16  -N 16  c1 -nservers 4
+srun -l -K -t 3 -p scx-comp -n 16  -N 16  c1 -nservers 4
