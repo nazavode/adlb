@@ -1,7 +1,7 @@
       implicit real*8 ( a-z )
       
       include "mpif.h"
-      include "adlb/adlb.h"
+      include "adlb/adlbf.h"
 
       integer :: status(MPI_STATUS_SIZE)
       integer :: work_handle(ADLB_HANDLE_SIZE)
