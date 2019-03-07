@@ -5,9 +5,9 @@
 #include <stdarg.h>
 #include <limits.h>
 
-#include "xq.h"
+#include <mpi.h>
 
-#include "mpi.h"
+#include <adlb/xq.h>
 
 #define  ADLB_VERSION             ADLBM
 #define  ADLB_VERSION_NUMBER      463

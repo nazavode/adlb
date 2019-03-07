@@ -32,7 +32,7 @@ xq_node_t *xq_prev(xq_t *xq, xq_node_t *xn);
 
 /* adlb-specific code here */
 
-#include "mpi.h"
+#include <mpi.h>
 
 #define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
 void *dmalloc(int,const char *,int);

@@ -1,8 +1,10 @@
 #include <inttypes.h>
 #include <stddef.h>
-#include "adlb.h"
-#include "mpi.h"
 #include <signal.h>
+
+#include <mpi.h>
+
+#include <adlb/adlb.h>
 
 #define DBG_CHECK_TIME  30
 
