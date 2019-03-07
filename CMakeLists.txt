@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project(adlb VERSION 0.1 LANGUAGES C)
 
 option(ADLB_ENABLE_FORTRAN "enable building the Fortran interface (requires Fortran toolchain)" ON)
+option(ADLB_ENABLE_EXAMPLES "enable building the bundled example programs" ON)
 
 if(ADLB_ENABLE_FORTRAN)
     include(CheckLanguage)
@@ -27,6 +28,7 @@ set(ADLB_SRC_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src)
 #
 add_library(adlb
     ${ADLB_SRC_PATH}/adlb.c
+    ${ADLB_SRC_PATH}/adlb_prof.c
     ${ADLB_SRC_PATH}/xq.c)
 add_library(adlb::adlb ALIAS adlb)
 set_property(TARGET adlb
@@ -53,4 +55,8 @@ if(ADLB_ENABLE_FORTRAN)
         PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
     target_link_libraries(adlb_fortran
         PUBLIC adlb::adlb)
+endif()
+
+if(ADLB_ENABLE_EXAMPLES)
+    add_subdirectory(examples)
 endif()
