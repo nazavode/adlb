@@ -14,7 +14,7 @@ please set ADLB_ENABLE_FORTRAN=OFF or provide a valid Fortran toolchain.")
     endif()
 endif()
 
-# Define adlb::mpi target
+# Define MPI::MPI_C target
 #
 find_package(MPI REQUIRED)
 
