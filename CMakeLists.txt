@@ -19,6 +19,9 @@ endif()
 #
 find_package(MPI REQUIRED)
 
+include(GNUInstallDirs)
+set(ADLB_INSTALL_TARGETS) # add to this list all targets to be installed
+
 # Common locations
 #
 set(ADLB_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -33,16 +36,21 @@ add_library(adlb
 add_library(adlb::adlb ALIAS adlb)
 set_property(TARGET adlb
     PROPERTY PUBLIC_HEADER ${ADLB_INCLUDE_PATH}/adlb/adlb.h)
-target_include_directories(adlb PUBLIC ${ADLB_INCLUDE_PATH})
+target_include_directories(adlb
+    PUBLIC    $<BUILD_INTERFACE:${ADLB_INCLUDE_PATH}>
+    INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
 target_link_libraries(adlb PUBLIC MPI::MPI_C)
+list(APPEND ADLB_INSTALL_TARGETS adlb)
 
 if(ADLB_ENABLE_FORTRAN)
+    set(ADLB_GEN_HEADERS_INCLUDE_PATH ${CMAKE_CURRENT_BINARY_DIR})
     # Ensure C/Fortran interoperability and
     # generate mangling header:
     include(FortranCInterface)
     FortranCInterface_VERIFY()
     FortranCInterface_HEADER(
-        ${CMAKE_CURRENT_BINARY_DIR}/fortran_c_mangling.h
+        ${ADLB_GEN_HEADERS_INCLUDE_PATH}/fortran_c_mangling.h
         MACRO_NAMESPACE "ADLB_FC_")
     # Define adlb::adlb_fortran target
     #
@@ -51,12 +59,32 @@ if(ADLB_ENABLE_FORTRAN)
     set_property(TARGET adlb_fortran 
         PROPERTY PUBLIC_HEADER ${ADLB_INCLUDE_PATH}/adlb/adlbf.h)
     target_include_directories(adlb_fortran
-        PUBLIC ${ADLB_INCLUDE_PATH}
-        PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+        PRIVATE   $<BUILD_INTERFACE:${ADLB_GEN_HEADERS_INCLUDE_PATH}>
+        PUBLIC    $<BUILD_INTERFACE:${ADLB_INCLUDE_PATH}>
+        INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    )
     target_link_libraries(adlb_fortran
         PUBLIC adlb::adlb)
+    list(APPEND ADLB_INSTALL_TARGETS adlb_fortran)
 endif()
 
+# Examples
+#
 if(ADLB_ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
+
+# Install and exports
+#
+install(TARGETS ${ADLB_INSTALL_TARGETS}
+    EXPORT adlb-exports
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} # Windows needs RUNTIME also for libraries
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/adlb)
+
+install(EXPORT adlb-exports
+    FILE AdlbTargets.cmake
+    NAMESPACE adlb::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/adlb
+)
