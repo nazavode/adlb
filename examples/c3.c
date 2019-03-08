@@ -5,6 +5,8 @@
 
 #include <adlb/adlb.h>
 
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
+
 #define NUM_AS_TO_GEN_PER_BATCH  100
 #define NUM_BS_TO_GEN_PER_BATCH  100
 #define NUM_CS_TO_GEN_PER_BATCH   60

@@ -1,11 +1,15 @@
-#include <stdio.h>
-
 /* This program seems to get fairly good parallelism if you have one
  * server per worker.  The real problem is the scheme for termination.
  * There is not a good method for telling when to stop.
  */
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include <adlb/adlb.h>
+
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
 
 #define WORK_TYPE        1
 #define WORK_PRIO        1

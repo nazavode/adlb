@@ -4,6 +4,8 @@
 
 #include <adlb/adlb.h>
 
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
+
 #define CMDLINE 1
 
 int main(int argc, char *argv[])

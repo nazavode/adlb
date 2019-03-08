@@ -4,6 +4,8 @@
 
 #include <adlb/adlb.h>
 
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
+
 #define MAXLEN 1024
 #define TYPE_AB 1
 #define TYPE_C  2

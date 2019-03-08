@@ -5,6 +5,8 @@
 
 #include <adlb/adlb.h>
 
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
+
 #define NUM_TYPES 8
 
 int num_types = NUM_TYPES;

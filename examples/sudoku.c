@@ -5,6 +5,8 @@
 
 #include <adlb/adlb.h>
 
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
+
 #define BOARD       1
 #define SOLUTION    2
 

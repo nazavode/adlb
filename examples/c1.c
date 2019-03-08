@@ -5,6 +5,8 @@
 
 #include <adlb/adlb.h>
 
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
+
 #define A_EPOCH   2
 #define CS_PER_B  4
 

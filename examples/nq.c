@@ -35,8 +35,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <adlb/adlb.h>
+
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
 
 #define WORK                  1000
 #define SOLUTION              2000

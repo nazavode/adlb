@@ -13,8 +13,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 #include <adlb/adlb.h>
+
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
 
 #define NUMDISKS 4
 #define WORK 1
