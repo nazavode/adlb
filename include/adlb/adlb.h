@@ -1,3 +1,6 @@
+#ifndef ADLB_ADLB_H_INCLUDED
+#define ADLB_ADLB_H_INCLUDED
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -92,3 +95,5 @@ void *dmalloc(int,const char *,int);
 #define amalloc(nbytes)   dmalloc(nbytes,__FUNCTION__,__LINE__)
 void dfree(void *,int,const char *,int);
 #define afree(ptr,nbytes) dfree(ptr,nbytes,__FUNCTION__,__LINE__)
+
+#endif

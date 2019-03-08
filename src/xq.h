@@ -1,3 +1,6 @@
+#ifndef ADLB_XQ_H_INCLUDED
+#define ADLB_XQ_H_INCLUDED
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -138,3 +141,5 @@ void cq_append(xq_node_t *xn);
 void cq_delete(xq_node_t *xn);
 xq_node_t *cq_find_seqno(int cqseqno);
 void cq_print_info(void);
+
+#endif
