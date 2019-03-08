@@ -5,9 +5,10 @@
 // just include the proper header
 #include <mpi.h>
 
+#include <adlb/adlb.h>
+
 void *dmalloc(int,const char *,int);
 void dfree(void *,int,const char *,int);
-void adlbp_dbgprintf(int flag, int linenum, char *fmt, ...);
 int adlbp_Probe(int , int, MPI_Comm, MPI_Status *);  /* used in aldb.c and adlb_prof.c */
 
 #define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)

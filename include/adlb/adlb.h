@@ -83,4 +83,8 @@ int ADLB_Abort(int);
 int ADLB_Begin_batch_put(void *, int);  /* used in aldbf.c (note the f) and adlb_prof.c */
 int ADLB_End_batch_put(void);           /* used in aldbf.c (note the f) and adlb_prof.c */
 
+// Internal functions left here for backwards compatibility,
+// to be moved in internal headers:
+void adlbp_dbgprintf(int flag, int linenum, char *fmt, ...);
+
 #endif
