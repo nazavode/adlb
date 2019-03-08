@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "mpi.h"  /* only used for timings */
+#include <mpi.h>  /* only used for timings */
 
 #define ROWS 		1000
 #define COLUMNS 	1000
@@ -14,22 +14,24 @@ struct globmem
     int pqbeg, pqend, niters, nproc, rows, ncols;
 } *glob;
 
+void gridinit(double m[ROWS+2][COLUMNS+2],int r,int c);
+void queueprob(int x);
 void work(char who);
 double avggrid();
 double avgbnd();
 
-slave()
+void slave()
 {
     work('s');
 }
 
-phi(int x,int y)			/* The function on the boundary */
+int phi(int x,int y)			/* The function on the boundary */
 {
       // return 1;
       return((x * x) - (y * y) + (x * y));   
 }
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     int i;
     double timestart, timeend;
@@ -95,7 +97,7 @@ main(int argc, char *argv[])
    of data.
 */
 
-gridinit(double m[ROWS+2][COLUMNS+2],int r,int c)
+void gridinit(double m[ROWS+2][COLUMNS+2],int r,int c)
 {
     int i, j;
     double bndavg;
@@ -120,13 +122,13 @@ gridinit(double m[ROWS+2][COLUMNS+2],int r,int c)
 	    m[i][j] = 0;
 }
 
-queueprob(int x)
+void queueprob(int x)
 {
     glob->pq[glob->pqend] = x;
     glob->pqend = (glob->pqend + 1) % (ROWS + 1);
 }
 
-compute(double p[ROWS+2][COLUMNS+2],double q[ROWS+2][COLUMNS+2], int r, int ncols)
+void compute(double p[ROWS+2][COLUMNS+2],double q[ROWS+2][COLUMNS+2], int r, int ncols)
 {
     int i, j;
     double stime;
@@ -211,7 +213,7 @@ void work(char who)			/* main routine for all processes */
     }
 }
 
-printgrid(double m[ROWS+2][COLUMNS+2], int r, int c)
+void printgrid(double m[ROWS+2][COLUMNS+2], int r, int c)
 {
     int i,j;
     for (i = 0; i < (r+2); i++)

@@ -10,6 +10,13 @@
 
 #include <adlb/adlb.h>
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
+
+int gridinit(double *m[], int r, int c);
 void printgrid(double **,int,int);
 double avggrid(double **,int,int);
 double avgbnd(double **,int,int);

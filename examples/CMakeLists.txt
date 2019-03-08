@@ -12,6 +12,9 @@ set(examples_c
     c4.c
     skel.c
     add2.c
+    grid_daf.c
+    grid_old_daf.c
+    grid_uni.c
 )
 
 set(examples_fortran
