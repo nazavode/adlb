@@ -11,7 +11,7 @@
 int c[MAXLEN], size;
 int num_types = 2, type_vect[2] = {TYPE_AB,TYPE_C};
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     int i, j, rc, provided, my_world_rank, num_world_nodes, *num_added, aprintf_flag;
     int a, b, int3[3], work_type, worklen, dest_rank, answer_rank, done_cnt;
