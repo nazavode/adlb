@@ -109,7 +109,7 @@ xq_node_t *xq_prev(xq_t *xq, xq_node_t *xn)
 /* wq stuff */
 
 /* must match adlb */
-#define ADLB_LOWEST_PRIO  INT_MIN
+// #define ADLB_LOWEST_PRIO  INT_MIN
 
 xq_node_t *wq_node_create(int work_type, int work_prio, int wqseqno, int answer_rank,
                           int target_rank, int work_len, void *work_buf)
