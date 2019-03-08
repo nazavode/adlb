@@ -5,6 +5,10 @@
 // just include the proper header
 #include <mpi.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define  ADLB_VERSION             ADLBM
 #define  ADLB_VERSION_NUMBER      463
 #define  ADLB_VERSION_DATE        27-Apr-2017
@@ -86,5 +90,9 @@ int ADLB_End_batch_put(void);           /* used in aldbf.c (note the f) and adlb
 // Internal functions left here for backwards compatibility,
 // to be moved in internal headers:
 void adlbp_dbgprintf(int flag, int linenum, char *fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
