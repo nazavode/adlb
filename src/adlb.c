@@ -1,12 +1,18 @@
-#include <inttypes.h>
-#include <stddef.h>
-#include <signal.h>
+#ifndef _GNU_SOURCE
+// Enable vasprintf in stdio.h
+#define _GNU_SOURCE 1
+#endif
+#include <stdio.h>
 
-#include <mpi.h>
+#include <unistd.h>
+#include <stdarg.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include <adlb/adlb.h>
 
 #include "xq.h"
+#include "adlb_internal.h"
 
 #define DBG_CHECK_TIME  30
 

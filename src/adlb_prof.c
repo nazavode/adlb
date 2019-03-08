@@ -1,5 +1,7 @@
 #include <adlb/adlb.h>
 
+#include "adlb_internal.h"
+
 /* we either log adlb internals or a guess at user state */
 /* when guessing the user state, we assume that the user is processing
  * a piece of work of a given type if they have done a Get_reserved

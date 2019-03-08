@@ -1,10 +1,9 @@
 #ifndef ADLB_XQ_H_INCLUDED
 #define ADLB_XQ_H_INCLUDED
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+// Unclear how to forward declare MPI types,
+// just include the proper header
+#include <mpi.h>
 
 typedef struct xq_node_t
 {
@@ -34,14 +33,6 @@ xq_node_t *xq_next(xq_t *xq, xq_node_t *xn);
 xq_node_t *xq_prev(xq_t *xq, xq_node_t *xn);
 
 /* adlb-specific code here */
-
-#include <mpi.h>
-
-#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
-void *dmalloc(int,const char *,int);
-#define amalloc(nbytes)   dmalloc(nbytes,__FUNCTION__,__LINE__)
-void dfree(void *,int,const char *,int);
-#define afree(ptr,nbytes) dfree(ptr,nbytes,__FUNCTION__,__LINE__)
 
 #define  REQ_TYPE_VECT_SZ                    16
 

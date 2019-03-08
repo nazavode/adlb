@@ -1,13 +1,8 @@
 #ifndef ADLB_ADLB_H_INCLUDED
 #define ADLB_ADLB_H_INCLUDED
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdarg.h>
-#include <limits.h>
-
+// Unclear how to forward declare MPI types,
+// just include the proper header
 #include <mpi.h>
 
 #define  ADLB_VERSION             ADLBM
@@ -85,15 +80,7 @@ int ADLB_Finalize(void);
 int ADLBP_Abort(int);
 int ADLB_Abort(int);
 
-int adlbp_Probe(int , int, MPI_Comm, MPI_Status *);  /* used in aldb.c and adlb_prof.c */
 int ADLB_Begin_batch_put(void *, int);  /* used in aldbf.c (note the f) and adlb_prof.c */
 int ADLB_End_batch_put(void);           /* used in aldbf.c (note the f) and adlb_prof.c */
-
-void adlbp_dbgprintf(int flag, int linenum, char *fmt, ...);
-#define aprintf(flag,...) adlbp_dbgprintf(flag,__LINE__,__VA_ARGS__)
-void *dmalloc(int,const char *,int);
-#define amalloc(nbytes)   dmalloc(nbytes,__FUNCTION__,__LINE__)
-void dfree(void *,int,const char *,int);
-#define afree(ptr,nbytes) dfree(ptr,nbytes,__FUNCTION__,__LINE__)
 
 #endif
