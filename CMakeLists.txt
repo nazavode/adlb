@@ -15,9 +15,21 @@ please set ADLB_ENABLE_FORTRAN=OFF or provide a valid Fortran toolchain.")
     endif()
 endif()
 
-# Define MPI::MPI_C target
+if(ADLB_ENABLE_EXAMPLES)
+    # Examples require C++
+    include(CheckLanguage)
+    check_language(CXX)
+    if(CMAKE_CXX_COMPILER)
+        enable_language(CXX)
+    else()
+        message(FATAL_ERROR "C++ support can't be enabled, \ 
+please set ADLB_ENABLE_EXAMPLES=OFF or provide a valid C++ toolchain.")
+    endif()
+endif()
+
+# Define MPI::MPI_* target
 #
-find_package(MPI REQUIRED)
+find_package(MPI REQUIRED C Fortran)
 
 include(GNUInstallDirs)
 set(ADLB_INSTALL_TARGETS) # add to this list all targets to be installed

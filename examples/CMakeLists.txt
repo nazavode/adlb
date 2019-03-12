@@ -17,6 +17,10 @@ set(examples_c
     grid_uni.c
 )
 
+set(examples_cpp
+    coinop.cpp
+)
+
 set(examples_fortran
     fbatcher.f
     f1.f
@@ -26,6 +30,17 @@ foreach(example_source IN LISTS examples_c)
     string(REGEX REPLACE "\\.[^.]*$" "" example_target ${example_source})
     add_executable(${example_target} ${example_source})
     target_link_libraries(${example_target} PRIVATE adlb::adlb m)
+endforeach()
+
+foreach(example_source IN LISTS examples_cpp)
+    string(REGEX REPLACE "\\.[^.]*$" "" example_target ${example_source})
+    add_executable(${example_target} ${example_source})
+    target_link_libraries(${example_target} PRIVATE adlb::adlb m)
+    set_target_properties(${example_target} PROPERTIES
+        CXX_STANDARD 14
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS NO
+    )
 endforeach()
 
 if(ADLB_ENABLE_FORTRAN)
