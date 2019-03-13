@@ -24,8 +24,6 @@ using handle = int;
 using priority = int;
 using payload_tag = int;
 
-// enum class payload : payload_tag { NONE = -1, TOKEN = 1 };
-
 constexpr payload_tag PAYLOAD_TOKEN = 1;
 constexpr payload_tag PAYLOAD_NONE = -11;
 
@@ -37,7 +35,6 @@ struct span {
     distance size{0};
 };
 
-// constexpr std::array<payload, 2> PAYLOAD_TYPES = {payload::TOKEN, payload::NONE};
 std::array<payload_tag, 2> PAYLOAD_TYPES = {PAYLOAD_TOKEN, PAYLOAD_NONE};
 
 constexpr int TARGET_ANY_RANK = -1;
@@ -79,14 +76,16 @@ bool pop() {
     return true;
 }
 
-template <typename T>
-void stats(const std::vector<T>& samples, int mpi_root_rank, ::MPI_Comm mpi_comm) {
-    const auto sum = std::accumulate(std::begin(samples), std::end(samples), 0);
+template <typename Container>
+void stats(const Container& samples, int mpi_root_rank, ::MPI_Comm mpi_comm) {
+    using value_type = typename Container::value_type;
+    const auto sum =
+        std::accumulate(std::begin(samples), std::end(samples), value_type{0});
     const double mean = sum / static_cast<double>(samples.size());
     const double stddev = [&] {
         double accum = 0.0;
         std::for_each(std::begin(samples), std::end(samples),
-                      [&](const double d) { accum += (d - mean) * (d - mean); });
+                      [&](auto d) { accum += (d - mean) * (d - mean); });
         return std::sqrt(accum / (samples.size() - 1));
     }();
     std::array<double, 2> stats_v = {mean, stddev};
@@ -117,7 +116,7 @@ void stats(const std::vector<T>& samples, int mpi_root_rank, ::MPI_Comm mpi_comm
 
     if (myrank == mpi_root_rank) {
         std::ostringstream os;
-        for (std::size_t i = 0; i < recv.size() - 1; i += stats_v.size()) {
+        for (decltype(recv.size()) i = 0; i < recv.size() - 1; i += stats_v.size()) {
             os << std::setfill(' ') << std::setw(4) << std::right << i / stats_v.size()
                << " " << recv[i] << " " << recv[i + 1] << '\n';
         }
@@ -206,10 +205,9 @@ int main(int argc, char** argv) {
         }
 
         if (comm_world_myrank == producer_rank) {
-            std::cout
-                << "World size : " << world_size << '\n'
-                << "Num servers: " << num_servers << '\n'
-                << "Num tokens : " << num_tokens << std::endl;
+            std::cout << "World size : " << world_size << '\n'
+                      << "Num servers: " << num_servers << '\n'
+                      << "Num tokens : " << num_tokens << std::endl;
         }
         stats(samples, producer_rank, work_comm);
     }
