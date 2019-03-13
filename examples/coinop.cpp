@@ -3,11 +3,21 @@
 #include <adlb/adlb.h>
 #include <mpi.h>
 
+#include <algorithm>
 #include <array>
+#include <chrono>
+#include <cmath>
 #include <cstddef>
+#include <cstdint>
 #include <exception>
+#include <iomanip>
 #include <iostream>
+#include <numeric>
+#include <sstream>
 #include <string>
+#include <vector>
+
+namespace {
 
 using payload_size = int;
 using handle = int;
@@ -27,16 +37,14 @@ struct span {
     distance size{0};
 };
 
-namespace {
 // constexpr std::array<payload, 2> PAYLOAD_TYPES = {payload::TOKEN, payload::NONE};
 std::array<payload_tag, 2> PAYLOAD_TYPES = {PAYLOAD_TOKEN, PAYLOAD_NONE};
 
 constexpr int TARGET_ANY_RANK = -1;
-}  // namespace
 
 void server() { ::ADLB_Server(5000000, 0); }
 
-void producer(const span& domain, int rank) {
+void push(const span& domain, int rank) {
     const auto err = ::ADLB_Begin_batch_put(nullptr, 0);
     if (err != ADLB_SUCCESS) throw std::runtime_error{"ADLB_Begin_batch_put failed"};
     struct janitor {
@@ -49,34 +57,79 @@ void producer(const span& domain, int rank) {
     }
 }
 
-void consumer() {
+bool pop() {
+    int types[2] = {1, -1};
+    int recv_handle[ADLB_HANDLE_SIZE];
     payload_tag recv_tag;
     priority recv_prio;
     // handle recv_handle;
-    int recv_handle[ADLB_HANDLE_SIZE];
     payload_size recv_size;
     int recv_rank;
-    int types[2] = {1, -1};
+    // Reserve
+    int err =
+        ::ADLB_Reserve(types, &recv_tag, &recv_prio, recv_handle, &recv_size, &recv_rank);
+    if (err == ADLB_NO_MORE_WORK || err == ADLB_DONE_BY_EXHAUSTION) return false;
+    if (err != ADLB_SUCCESS) throw std::runtime_error{"ADLB_Reserve failed"};
+    if (recv_tag != PAYLOAD_TYPES[0])
+        throw std::runtime_error{"ADLB_Reserve reserved ad unknown type of payload"};
+    // Receive
+    token recv_token;
+    err = ::ADLB_Get_reserved(&recv_token, recv_handle);
+    if (err != ADLB_SUCCESS) throw std::runtime_error{"ADLB_Get_reserved failed"};
+    return true;
+}
 
-    int count = 0;
-    while (true) {
-        // Reserve
-        int err = ::ADLB_Reserve(types, &recv_tag, &recv_prio,
-                                 recv_handle, &recv_size, &recv_rank);
-        if (err == ADLB_NO_MORE_WORK || err == ADLB_DONE_BY_EXHAUSTION) break;
-        if (err != ADLB_SUCCESS) throw std::runtime_error{"ADLB_Reserve failed"};
-        if (recv_tag != PAYLOAD_TYPES[0])
-            throw std::runtime_error{"ADLB_Reserve reserved ad unknown type of payload"};
-        // Receive
-        token recv_token;
-        err = ::ADLB_Get_reserved(&recv_token, recv_handle);
-        if (err != ADLB_SUCCESS) throw std::runtime_error{"ADLB_Get_reserved failed"};
-        // Work the token (do nothing)
-        ++count;
+template <typename T>
+void stats(const std::vector<T>& samples, int mpi_root_rank, ::MPI_Comm mpi_comm) {
+    const auto sum = std::accumulate(std::begin(samples), std::end(samples), 0);
+    const double mean = sum / static_cast<double>(samples.size());
+    const double stddev = [&] {
+        double accum = 0.0;
+        std::for_each(std::begin(samples), std::end(samples),
+                      [&](const double d) { accum += (d - mean) * (d - mean); });
+        return std::sqrt(accum / (samples.size() - 1));
+    }();
+    std::array<double, 2> stats_v = {mean, stddev};
+
+    const auto comm_size = [&] {
+        int size;
+        auto err = ::MPI_Comm_size(mpi_comm, &size);
+        if (err != MPI_SUCCESS) throw std::runtime_error{"MPI_Comm_size failed"};
+        return size;
+    }();
+
+    const auto myrank = [&] {
+        int rank;
+        auto err = ::MPI_Comm_rank(mpi_comm, &rank);
+        if (err != MPI_SUCCESS) throw std::runtime_error{"MPI_Comm_rank failed"};
+        return rank;
+    }();
+
+    std::vector<double> recv;
+
+    if (myrank == mpi_root_rank) {
+        recv.resize(stats_v.size() * comm_size, 0);
+    }
+
+    const auto err = ::MPI_Gather(stats_v.data(), stats_v.size(), MPI_DOUBLE, recv.data(),
+                                  stats_v.size(), MPI_DOUBLE, mpi_root_rank, mpi_comm);
+    if (err != MPI_SUCCESS) throw std::runtime_error{"MPI_Gather failed"};
+
+    if (myrank == mpi_root_rank) {
+        std::ostringstream os;
+        for (std::size_t i = 0; i < recv.size() - 1; i += stats_v.size()) {
+            os << std::setfill(' ') << std::setw(4) << std::right << i / stats_v.size()
+               << " " << recv[i] << " " << recv[i + 1] << '\n';
+        }
+        std::cout << os.str() << std::endl;
     }
 }
 
+}  // namespace
+
 int main(int argc, char** argv) {
+    using clock_t = std::chrono::high_resolution_clock;
+
     if (argc < 2) {
         std::cerr << "Usage: " << argv[0] << " <ntokens> [nservers] [producer rank]"
                   << std::endl;
@@ -134,9 +187,30 @@ int main(int argc, char** argv) {
     if (am_server) {
         server();
     } else {
-        if (comm_world_myrank == producer_rank) {   
-            producer({0, num_tokens}, comm_world_myrank);
+        if (comm_world_myrank == producer_rank) {
+            // Push all tokens at once from a single task,
+            // this should force all the servers to balance
+            // the load among themselves
+            push({0, num_tokens}, comm_world_myrank);
         }
-        consumer();
+        // Worker
+        std::vector<std::uint64_t> samples;
+        samples.reserve(num_tokens / num_workers);
+        while (true) {
+            auto t = clock_t::now();
+            bool has_work = pop();
+            samples.push_back(
+                std::chrono::duration_cast<std::chrono::milliseconds>(clock_t::now() - t)
+                    .count());
+            if (!has_work) break;
+        }
+
+        if (comm_world_myrank == producer_rank) {
+            std::cout
+                << "World size : " << world_size << '\n'
+                << "Num servers: " << num_servers << '\n'
+                << "Num tokens : " << num_tokens << std::endl;
+        }
+        stats(samples, producer_rank, work_comm);
     }
 }
