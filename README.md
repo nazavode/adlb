@@ -8,7 +8,7 @@ ADLB provides both `C` and `Fortran` APIs.
 
 **This is a fork of the [original ADLB project](https://www.cs.mtsu.edu/~rbutler/adlb/)
 by [Prof. Ralph Butler](https://www.cs.mtsu.edu/~rbutler).
-Please find upstream repo here: http://svn.cs.mtsu.edu/svn/adlbm/trunk**
+Please find upstream repo [here](http://svn.cs.mtsu.edu/svn/adlbm/trunk).**
 
 ## Improvements over upstream
 
@@ -20,14 +20,15 @@ code bases, specifically the following improvements have been made:
 * code clean up, reduced public interface and header inclusions flowing
   downstream to users;
 * auto-generated `Fortran` linkage mangling;
+* additional benchmarks;
 * bug fixes.
 
 # License
 
 The code in this repo tries really hard to abide by the original license
-from upstream. While no proper licesing information is shipped with the original
-code, a reference to MPICH licesing model is reported on
-[project's home page](https://www.cs.mtsu.edu/~rbutler/adlb/): library authors have been 
-contacted to find a proper license for this repo while in the meantime a
-license similar to MPICH's (a BSD-like) has been tentatively adopted. Please note
-that a relicense could be necessary in the near future.
+from upstream. While no proper licensing information is shipped with the original
+code, a reference to [MPICH licesing model](http://git.mpich.org/mpich.git/blob/HEAD:/COPYRIGHT)
+is reported on the [project's home page](https://www.cs.mtsu.edu/~rbutler/adlb/):
+library authors have been contacted to find a proper license for this repo while 
+in the meantime a license similar to MPICH's (a BSD-like) has been tentatively adopted.
+Please note that a relicense could be necessary in the near future.
