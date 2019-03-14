@@ -30,5 +30,7 @@ from upstream. While no proper licensing information is shipped with the origina
 code, a reference to [MPICH licesing model](http://git.mpich.org/mpich.git/blob/HEAD:/COPYRIGHT)
 is reported on the [project's home page](https://www.cs.mtsu.edu/~rbutler/adlb/):
 library authors have been contacted to find a proper license for this repo while 
-in the meantime a license similar to MPICH's (a BSD-like) has been tentatively adopted.
+in the meantime a restrictive license has been tentatively adopted
+([GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)) in order to leave
+room to relax some terms and switch to a more permissive one (e.g.: a BSD-like).
 Please note that a relicense could be necessary in the near future.
